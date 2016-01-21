@@ -4,6 +4,7 @@
 <%@taglib uri="/bbNG" prefix="bbNG"%>
 
 <%@ page import="gdp18.synote.Utils" %>
+<%@ page import="gdp18.synote.PostRequester" %>
 
 <%@ page import="java.io.OutputStreamWriter"%>
 <%@ page import="java.net.HttpURLConnection"%>
@@ -27,26 +28,13 @@
 			+ "?token="
 			+ Utils.generateRequestJWT(username, course_id, "creator");
 	
-	URL obj = new URL(url);
-	
 	JSONObject json = new JSONObject();
 	json.put("outputId", course_id);
 	json.put("name", course_name);
 	json.put("description", course_desc);
 	String valuesJSON = json.toString();
 	
-	HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-	con.setRequestMethod("POST");
-	con.setRequestProperty("Content-Type", "application/json");
-	con.setRequestProperty("Accept", "application/json");
-	con.setDoOutput(true);
-	con.setDoInput(true);
-	
-	OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
-	wr.write(valuesJSON);
-	wr.flush();
-	
-	int x = con.getResponseCode();  
+	int x = PostRequester.sendRequest("POST", url, valuesJSON);  
 	
 	if (x == 200){
 	%>

@@ -7,7 +7,7 @@
         <description value= "Allows instructors to share links to Synote recordings on the relevant course pages."/>
         <version value= "1.0.0"/>
         <requires>
-            <bbversion value="9.0"/>
+            <bbversion value="9.1"/>
         </requires>
         <vendor>
             <id value="syn"/>
@@ -29,9 +29,9 @@
                 <links>
                     <link>
                         <type value="tool"/>
-                        <name value="Synote tool"/>
+                        <name value="Synote Content"/>
                         <url value="Content.jsp" />
-                        <description value="The Synote course Tool" />
+                        <description value="The Synote Content for this course" />
                         <icons>
                         	<listitem value="images/synote_logo.png"/>
                         </icons>

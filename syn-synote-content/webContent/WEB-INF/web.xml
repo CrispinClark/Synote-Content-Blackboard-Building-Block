@@ -9,12 +9,4 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  <servlet>
-  	<servlet-name>MapFoldersServlet</servlet-name>
-  	<servlet-class>gdp18.synote.MapFoldersServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-		<servlet-name>MapFoldersServlet</servlet-name>
-		<url-pattern>/MapFoldersServlet</url-pattern>
-	</servlet-mapping>
 </web-app>
