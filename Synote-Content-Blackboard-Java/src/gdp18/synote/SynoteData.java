@@ -9,12 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.eclipse.birt.chart.util.PluginSettings;
-import org.hibernate.type.descriptor.java.CalendarDateTypeDescriptor;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.ibm.icu.util.Calendar;
 
 import blackboard.data.course.Course;
 import blackboard.data.course.CourseMembership;
@@ -195,7 +191,7 @@ public class SynoteData {
                 || membershipRole.getDbRole().isActAsInstructor();
     }
     
- // Check for system tools configuration entitlement
+    // Check for system tools configuration entitlement
     public static boolean userCanConfigureSystem() {
         return SecurityUtil.userHasEntitlement("system.panopto.EXECUTE");
     }

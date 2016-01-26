@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
     <wb-module deploy-name="syn-synote-content">
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/" source-path="/webContent"/>
+        <dependent-module archiveName="Synote-Content-Blackboard-Java-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/Synote-Content-Blackboard-Java/Synote-Content-Blackboard-Java">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="syn-synote-content"/>
         <property name="java-output-path" value="/syn-synote-content/bin"/>
     </wb-module>

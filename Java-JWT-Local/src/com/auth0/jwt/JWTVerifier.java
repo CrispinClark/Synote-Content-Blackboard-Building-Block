@@ -28,7 +28,7 @@ public class JWTVerifier {
     private final byte[] secret;
     private final String audience;
     private final String issuer;
-    private final Base64 decoder = new Base64(true);;
+    private final Base64 decoder = new Base64(true);
 
     private final ObjectMapper mapper;
 

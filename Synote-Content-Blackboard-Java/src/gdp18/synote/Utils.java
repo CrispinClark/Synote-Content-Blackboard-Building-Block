@@ -9,9 +9,6 @@ import java.io.PrintWriter;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTSigner.Options;
 
@@ -49,21 +46,6 @@ public class Utils {
     	return "/connect/course/"+courseId+"/suggest";
     }
     
-    public static String getJsonFromHttpRequest(HttpServletRequest request)
-    		throws ServletException, IOException{
-    	StringBuilder sb = new StringBuilder();
-        BufferedReader reader = request.getReader();
-        try {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append('\n');
-            }
-        } finally {
-            reader.close();
-        }
-        return sb.toString();
-    }
-    
     public static String generateRequestJWT(String userId, String courseId, 
 			String subjectRole){
 
@@ -80,6 +62,21 @@ public class Utils {
 		return signer.sign(requestClaims, options);
 	}
 
+    public String generateRequestJWT(String sharedKey, int expirySeconds, String userId, 
+    		String courseId, String subjectRole){
+    	JWTSigner signer = new JWTSigner(sharedKey);
+		
+		LinkedHashMap<String, Object> requestClaims = new LinkedHashMap<String, Object>();
+		requestClaims.put("user", userId);
+		requestClaims.put("subjectCourse", courseId);
+		requestClaims.put("subjectRole", subjectRole);
+		
+		Options options = new Options();
+		options.setExpirySeconds(expirySeconds);
+		
+		return signer.sign(requestClaims, options);
+    }
+    
     public static boolean isInteger(String str) {
         if (str == null) {
             return false;
@@ -102,6 +99,10 @@ public class Utils {
             }
         }
         return true;
+    }
+    
+    public static boolean isValidXML(String str){
+    	return !(str.contains("<") | str.contains(">") | str.contains("&"));
     }
     
 	public static void log(String logMessage){
@@ -137,6 +138,4 @@ public class Utils {
         catch(Exception ex) {
         }
     }
-    
-    
 }
