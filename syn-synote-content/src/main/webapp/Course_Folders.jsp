@@ -3,9 +3,9 @@
 
 <%@ page import="java.util.*" %>
 
-<%@ page import="gdp18.synote.SynoteCourseFolderData"%>
-<%@ page import="gdp18.synote.SynoteFolder"%>
-<%@ page import="gdp18.synote.Utils"%>
+<%@ page import="gdp18.synote.control.SynoteCourseFolderGetter"%>
+<%@ page import="gdp18.synote.control.Utils"%>
+<%@ page import="gdp18.synote.model.SynoteFolder"%>
 
 <%@ taglib prefix="bbNG" uri="/bbNG"%>
 
@@ -24,18 +24,18 @@
 	//Passed from Blackboard.
 	String course_id = request.getParameter("course_id");
 
-	SynoteCourseFolderData courseFolderData = new SynoteCourseFolderData(ctx);
-	String username = courseFolderData.getBbUserName();
-	String courseCode = courseFolderData.getCourseCode();
-	String courseTitle = courseFolderData.getCourseName();
-	String courseDescription = courseFolderData.getCourseDescription();
+	SynoteCourseFolderGetter courseFolderGetter = new SynoteCourseFolderGetter(ctx);
+	String username = courseFolderGetter.getBbUserName();
+	String courseCode = courseFolderGetter.getCourseCode();
+	String courseTitle = courseFolderGetter.getCourseName();
+	String courseDescription = courseFolderGetter.getCourseDescription();
 	
 	String parentPageTitle = "Synote Content";
 	String addFoldersURL = Utils.addCourseFoldersScriptURL + "?course_id=" + course_id;
 	String mapFoldersURL = Utils.mapFoldersURL + "?course_id=" + courseCode;
 	String configureCourseURL = Utils.configureCourseScriptURL;
 	
-	boolean configured = courseFolderData.getMappedFoldersFromServer();
+	boolean configured = courseFolderGetter.getMappedFoldersFromServer();
 	List<SynoteFolder> mappedFolders;
 	
 	Comparator<SynoteFolder> folderSortByName = new Comparator<SynoteFolder>(){
@@ -48,7 +48,7 @@
 	};
 	
 	// First check if the caller is allowed to be here
-	if (!courseFolderData.userMayConfig()){
+	if (!courseFolderGetter.userMayConfig()){
 		%>
 		You do not have access to configure this course.
 		<%
@@ -68,7 +68,7 @@
 		<%
 	}
 	else{
-		mappedFolders = courseFolderData.getMappedFolders();
+		mappedFolders = courseFolderGetter.getMappedFolders();
 		
 		if (mappedFolders == null || mappedFolders.size() == 0){
 		%>

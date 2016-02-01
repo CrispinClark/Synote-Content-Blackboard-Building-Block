@@ -1,4 +1,4 @@
-package gdp18.synote;
+package gdp18.synote.model;
 
 public class SynoteFolder {
 	

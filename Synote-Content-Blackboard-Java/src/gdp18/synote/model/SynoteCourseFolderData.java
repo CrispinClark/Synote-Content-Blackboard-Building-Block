@@ -1,84 +1,29 @@
-package gdp18.synote;
+package gdp18.synote.model;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONArray;
 
-import blackboard.platform.context.Context;
-
-public class SynoteCourseFolderData extends SynoteData{
-
+public class SynoteCourseFolderData {
 	private HashMap<String, SynoteFolder> folders;
+	private boolean isConfigured;
 	
-	public SynoteCourseFolderData(Context ctx) {
-		super(ctx);
+	public SynoteCourseFolderData(){
 		folders = new HashMap<>();
 	}
 
-	public SynoteCourseFolderData(String course, String user){
-		super(course, user);
-		folders=new HashMap<>();
-	}
-
-    public String convertArrayToCollectionsJSON(String[] values) throws JSONException{
-    	JSONObject json = new JSONObject();
-		json.put("collections", values);
-		return json.toString();
-    }
-    
-	public boolean getMappedFoldersFromServer() throws Exception{
-		String json = requestMappedFoldersJsonFromServer();
-		if (!isCourseConfigured(json)){
-			return false;
-		}
-		
-		folders = parseMappedFoldersJson(json);
-		return true;
-	}
-	
-    public String requestMappedFoldersJsonFromServer() throws Exception{
-    	String courseId = bbCourse.getBatchUid();
-    	String jwt = getJWT();
-    	String url = Utils.pluginSettings.getSynoteURL() 
-    			+ Utils.getCourseMappingsURL(courseId)
-    			+ "?token="
-    			+ jwt;
-    	
-    	return sendGetRequest(url);
-    }
-    
-
-	public void getSuggestedFoldersFromServer() throws Exception{
-		String json = requestSuggestedFoldersJsonFromServer();
-		folders = parseSuggestedFoldersJson(json);
-	}
-	
-    public String requestSuggestedFoldersJsonFromServer() throws Exception{
-    	String courseId = bbCourse.getBatchUid();
-    	String jwt = getJWT();
-    	String url = Utils.pluginSettings.getSynoteURL() 
-    			+ Utils.getSuggestedFoldersURL(courseId)
-    			+ "?token="
-    			+ jwt;
-    	
-    	return sendGetRequest(url);
-    }
-    
-    private HashMap<String, SynoteFolder> parseMappedFoldersJson(String mappedJsonString) 
+    public void parseMappedFoldersJson(String mappedJsonString) 
     		throws JSONException{
     	HashMap<String, SynoteFolder> newFolders = new HashMap<>();
     	JSONObject obj = new JSONObject(mappedJsonString);
+    	isConfigured = obj.getBoolean("configured");
+    	if (!isConfigured){
+    		return;
+    	}
+    	
     	if (obj.optJSONArray("mappings") != null){
     		JSONArray mappings = obj.getJSONArray("mappings");
     		for (int i = 0; i < mappings.length(); i++){
@@ -90,14 +35,19 @@ public class SynoteCourseFolderData extends SynoteData{
 	    		newFolders.put(name, new SynoteFolder(name, description, inputId, true));
 	    	}
     	}
-    	return newFolders;
+    	this.folders = newFolders;
     }
     
-    private HashMap<String, SynoteFolder> parseSuggestedFoldersJson(String suggestedJsonString) 
+
+    public void parseSuggestedFoldersJson(String suggestedJsonString) 
     		throws JSONException{
     	HashMap<String, SynoteFolder> newFolders = new HashMap<>();
     	
     	JSONObject obj = new JSONObject(suggestedJsonString);
+    	isConfigured = obj.getBoolean("configured");
+    	if (!isConfigured){
+    		return;
+    	}
     	
     	if (obj.optJSONArray("collections") != null){
     		JSONArray collections = obj.getJSONArray("collections");
@@ -158,8 +108,9 @@ public class SynoteCourseFolderData extends SynoteData{
 	    		newFolders.get(name).setOther(true);
 	    	}
     	}    	
-    	return newFolders;
+    	folders = newFolders;
     }
+
 
     public ArrayList<SynoteFolder> getMappedFolders(){
     	ArrayList<SynoteFolder> mappedFolders = new ArrayList<>();
@@ -199,5 +150,9 @@ public class SynoteCourseFolderData extends SynoteData{
     		}
     	}
     	return allFolders;
+    }    
+    
+    public boolean isCourseConfigured(){
+    	return this.isConfigured;
     }
 }

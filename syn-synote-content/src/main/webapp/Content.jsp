@@ -2,9 +2,9 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="bbNG" uri="/bbNG"%>
 
-<%@ page import="gdp18.synote.SynoteContentData"%>
-<%@ page import="gdp18.synote.Utils"%>
-<%@ page import="gdp18.synote.SynoteContentItem" %>
+<%@ page import="gdp18.synote.control.SynoteContentGetter"%>
+<%@ page import="gdp18.synote.control.Utils"%>
+<%@ page import="gdp18.synote.model.SynoteContentItem" %>
 <%@ page import="java.util.*" %>
 
 <%@ taglib prefix="bbNG" uri="/bbNG"%>
@@ -27,15 +27,15 @@
 	String courseFoldersURL = Utils.courseFoldersScriptURL + "?course_id=" + course_id;
 	String configureCourseURL = Utils.configureCourseScriptURL;	
 	
-	SynoteContentData synoteContentData = new SynoteContentData(ctx);
-	boolean userMayConfig = synoteContentData.userMayConfig();
-	boolean configured = synoteContentData.getContentItemsFromServer();
+	SynoteContentGetter synoteContentGetter = new SynoteContentGetter(ctx);
+	boolean userMayConfig = synoteContentGetter.userMayConfig();
+	boolean configured = synoteContentGetter.getContentItemsFromServer();
 	List<SynoteContentItem> contentItems;	
 	
-	String username = synoteContentData.getBbUserName();
-	String courseCode = synoteContentData.getCourseCode();
-	String courseTitle = synoteContentData.getCourseName();
-	String courseDescription = synoteContentData.getCourseDescription();
+	String username = synoteContentGetter.getBbUserName();
+	String courseCode = synoteContentGetter.getCourseCode();
+	String courseTitle = synoteContentGetter.getCourseName();
+	String courseDescription = synoteContentGetter.getCourseDescription();
 	
 	Comparator<SynoteContentItem> itemSortByName = new Comparator<SynoteContentItem>(){
 		public int compare(SynoteContentItem o1, SynoteContentItem o2){
@@ -76,7 +76,7 @@
 		}
 	}
 	else{
-		contentItems = synoteContentData.getItems();
+		contentItems = synoteContentGetter.getItems();
 		%>
 		<bbNG:inventoryList
 			description="<%= page_title %>"
@@ -98,15 +98,12 @@
 	 			name="Name"
 	 			comparator="<%= itemSortByName %>">
 	 			<div id="item">
-	 				<h2><a href="<%= itemList.getSynoteURL() %>">
+	 				<h2><a href="<%= itemList.getSynoteURL() %>" target="_blank">
 	 					<%= itemList.getName() %>
 	 				</a></h2>
 	 				<p>
 	 					<%= itemList.getDescription().equals(null) ? "No description available" : itemList.getDescription() %>
 	 				</p><br>
-	 				<div>
-	 					Created by <%= itemList.getCreatorUsername() %>
-	 				</div>
 	 			</div>
 	 		</bbNG:listElement>
 	 		<bbNG:listElement

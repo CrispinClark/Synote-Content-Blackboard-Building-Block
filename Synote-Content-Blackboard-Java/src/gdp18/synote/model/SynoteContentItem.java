@@ -1,4 +1,4 @@
-package gdp18.synote;
+package gdp18.synote.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,8 +11,6 @@ public class SynoteContentItem {
 	private String inputId;
 	private String name;
 	private String description;
-	private String creatorId;
-	private String creatorUsername;
 	private String mp3URL;
 	private String mp4URL;
 	private Date startTime;
@@ -44,18 +42,6 @@ public class SynoteContentItem {
 	}
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	public String getCreatorId() {
-		return creatorId;
-	}
-	public void setCreatorId(String creatorId) {
-		this.creatorId = creatorId;
-	}
-	public String getCreatorUsername() {
-		return creatorUsername;
-	}
-	public void setCreatorUsername(String creatorUsername) {
-		this.creatorUsername = creatorUsername;
 	}
 	public String getMp3URL() {
 		return mp3URL;

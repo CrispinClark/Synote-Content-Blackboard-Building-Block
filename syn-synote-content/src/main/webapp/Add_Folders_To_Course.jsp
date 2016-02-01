@@ -3,9 +3,9 @@
 
 <%@ page import="java.util.*" %>
 
-<%@ page import="gdp18.synote.SynoteCourseFolderData"%>
-<%@ page import="gdp18.synote.SynoteFolder"%>
-<%@ page import="gdp18.synote.Utils"%>
+<%@ page import="gdp18.synote.control.SynoteCourseFolderGetter"%>
+<%@ page import="gdp18.synote.model.SynoteFolder"%>
+<%@ page import="gdp18.synote.control.Utils"%>
 
 <%@ taglib prefix="bbNG" uri="/bbNG"%>
 
@@ -16,16 +16,16 @@
 	//Passed from Blackboard.
 	String course_id = request.getParameter("course_id");
 
-	SynoteCourseFolderData courseFolderData = new SynoteCourseFolderData(ctx);
-	String username = courseFolderData.getBbUserName();
-	String courseCode = courseFolderData.getCourseCode();
+	SynoteCourseFolderGetter courseFolderGetter = new SynoteCourseFolderGetter(ctx);
+	String username = courseFolderGetter.getBbUserName();
+	String courseCode = courseFolderGetter.getCourseCode();
 	
 	String mapFoldersURL = Utils.mapFoldersURL + "?course_id=" + courseCode;
 	
 	List<SynoteFolder> availableFolders;
 
-	courseFolderData.getSuggestedFoldersFromServer();
-	availableFolders = courseFolderData.getAllUnmappedFolders();
+	courseFolderGetter.getSuggestedFoldersFromServer();
+	availableFolders = courseFolderGetter.getAllUnmappedFolders();
 	
 	Comparator<SynoteFolder> folderSortByName = new Comparator<SynoteFolder>(){
 		public int compare(SynoteFolder o1, SynoteFolder o2){
@@ -53,7 +53,7 @@
 	</bbNG:pageHeader>
 	<%
 	// First check if the caller is allowed to be here
-	if (!courseFolderData.userMayConfig()){
+	if (!courseFolderGetter.userMayConfig()){
 		%>
 		You do not have access to configure this course.
 		<%

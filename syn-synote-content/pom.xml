@@ -7,6 +7,7 @@
   
   <properties>
   	<blackboard.platform-version>9.1.110082.0</blackboard.platform-version>
+  	<!-- Change bb-host and bb-directory for your own project -->
   	<bb-host>svm-tk1g11-gdp18.ecs.soton.ac.uk</bb-host>
   	<bb-directory>C:/Users/Crispin/Desktop/Blackboard SDK</bb-directory>
   </properties>
@@ -22,33 +23,6 @@
   
   <build>
 	<finalName>synote-blackboard</finalName>
-	<plugins>
-		<!-- The following task is called by executing 'mvn antrun:run' -->
-		<plugin>
-			<artifactId>maven-antrun-plugin</artifactId>
-			<version>1.5</version>
-			<dependencies>
-				<dependency>
-					<groupId>com.justplainwiley.eclipse</groupId>
-					<artifactId>b2deploy-task</artifactId>
-					<version>1.1</version>
-				</dependency>
-			</dependencies> 
-			<configuration>
-				<!-- The b2deploy task automatically deploys the -->
-				<!-- war file onto the development  server. -->
-				<target>
-					<taskdef name="b2deploy" classpathref="maven.plugin.classpath"
-						classname="org.oscelot.ant.B2DeployTask" />
-					<b2deploy localfilepath="${project.basedir}/target/synote-blackboard.war"
-						host="${bb-host}" courseorgavailable="true" clean="true" />
-				</target>
-				<!-- Requires "Starting Block 1.2.3 with Upload" installed on the server. -->
-				<!-- Download "bb-starting-block-123.war" from -->
-				<!-- https://behind.blackboard.com/s/developer/dlc/download.aspx?d=1335 -->
-			</configuration>
-		</plugin>
-	</plugins>
   </build>
   
   <dependencies>
@@ -77,6 +51,11 @@
 		<groupId>org.json</groupId>
 		<artifactId>json</artifactId>
 		<version>20151123</version>
+	</dependency>
+  	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>servlet-api</artifactId>
+		<version>2.5</version>
 	</dependency>
   	
   	<!-- BLACKBOARD LIBRARIES -->

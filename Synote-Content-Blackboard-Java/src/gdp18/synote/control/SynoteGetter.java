@@ -1,4 +1,4 @@
-package gdp18.synote;
+package gdp18.synote.control;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,18 +26,18 @@ import blackboard.platform.context.Context;
 import blackboard.platform.persistence.PersistenceServiceFactory;
 import blackboard.platform.security.SecurityUtil;
 
-public class SynoteData {
+public abstract class SynoteGetter {
 	
 	protected Course bbCourse;
 	protected User bbUser;
 	protected String bbUserName;
 	protected boolean isInstructor;
 	
-	public SynoteData(Context ctx){
-		InitSynoteData(ctx.getCourse(), ctx.getUser());
+	public SynoteGetter(Context ctx){
+		initSynoteGetter(ctx.getCourse(), ctx.getUser());
     }
 	
-	public SynoteData(String courseId, String username){
+	public SynoteGetter(String courseId, String username){
 		BbPersistenceManager bbPm = PersistenceServiceFactory.getInstance().getDbPersistenceManager();
 		try {
 			CourseDbLoader courseLoader = (CourseDbLoader) bbPm.getLoader(CourseDbLoader.TYPE);
@@ -46,13 +46,13 @@ public class SynoteData {
 			UserDbLoader userLoader = (UserDbLoader) bbPm.getLoader(UserDbLoader.TYPE);
 			User bbUser = userLoader.loadByUserName(username);
 			
-			InitSynoteData(bbCourse, bbUser);
+			initSynoteGetter(bbCourse, bbUser);
 		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
 	}
 	
-    protected void InitSynoteData(Course bbCourse, User bbUser){
+    protected void initSynoteGetter(Course bbCourse, User bbUser){
     	this.bbCourse = bbCourse;
     	this.bbUser = bbUser;
         this.bbUserName = bbUser.getUserName();
@@ -71,53 +71,6 @@ public class SynoteData {
 		return bbCourse.getDescription();
 	}
 	
-    public String createCourseInfoJsonObject(){
-
-		JSONObject obj = new JSONObject();
-		
-		JSONObject created = new JSONObject();
-		JSONObject viewable = new JSONObject();
-		
-		try {
-			//Retrieve the Db persistence manager from the persistence service
-			BbPersistenceManager bbPm = PersistenceServiceFactory.getInstance().getDbPersistenceManager();
-			CourseDbLoader courseLoader = (CourseDbLoader) bbPm.getLoader(CourseDbLoader.TYPE);
-			
-			List<Course> courses = courseLoader.loadByUserId(bbUser.getId());
-			
-			CourseMembershipDbLoader crsMembershipLoader = 
-					(CourseMembershipDbLoader) bbPm.getLoader(CourseMembershipDbLoader.TYPE);
-			
-			for (Course c : courses){
-				
-				CourseMembership cm = crsMembershipLoader.loadByCourseAndUserId(c.getId(), bbUser.getId());
-				if (isInstructorRole(cm.getRole())){
-					created.put(c.getBatchUid(), c.getTitle());
-				}
-				else{
-					viewable.put(c.getBatchUid(), c.getTitle());
-				}
-			}
-
-			obj.put("creator", created);
-			obj.put("viewer", viewable);
-			
-		} catch (PersistenceException e) {
-			e.printStackTrace(); //TODO autogen
-			return "BB Persistence Error";
-		} catch (JSONException e) {
-			e.printStackTrace(); //TODO autogen
-			return "JSON Exception";			
-		}		
-		
-		return obj.toString();
-	}
-
-    public boolean isCourseConfigured(String jsonString) throws Exception{
-    	JSONObject obj = new JSONObject(jsonString);
-    	return obj.getBoolean("configured");
-    }
-    
     public String sendGetRequest(String url) throws Exception{
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -199,4 +152,6 @@ public class SynoteData {
 	public String getBbUserName() {
 		return bbUserName;
 	}
+	
+	public abstract boolean isCourseConfigured();
 }

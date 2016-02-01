@@ -1,0 +1,1 @@
+{"configured":true,"mappings":[{"inputId":"inputID0","description":"description0"},{"inputId":"inputID1","description":"description1"},{"inputId":"inputID2","description":"description2"}]}

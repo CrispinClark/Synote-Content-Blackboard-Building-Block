@@ -1,11 +1,11 @@
-package gdp18.synote;
+package gdp18.synote.control;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class PostRequester {
+public class RequestSender {
 	public static int sendRequest(String requestType, String url, String inputAsString) throws IOException{
 		URL obj = new URL(url);
 		

@@ -24,7 +24,7 @@
                 <description>Synote Course Tool</description>
                 <links>
                     <link>
-                        <type value="course_tool"/>
+                        <type value="tool"/>
                         <name value="Synote Content"/>
                         <url value="Content.jsp" />
                         <description value="The Synote Content for this course" />

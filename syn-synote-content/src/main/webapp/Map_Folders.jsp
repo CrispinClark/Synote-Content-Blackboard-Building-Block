@@ -3,8 +3,8 @@
 
 <%@taglib uri="/bbNG" prefix="bbNG"%>
 
-<%@ page import="gdp18.synote.Utils" %>
-<%@ page import="gdp18.synote.PostRequester" %>
+<%@ page import="gdp18.synote.control.RequestSender" %>
+<%@ page import="gdp18.synote.control.Utils" %>
 
 <%@ page import="java.io.OutputStreamWriter"%>
 <%@ page import="java.net.HttpURLConnection"%>
@@ -42,7 +42,7 @@
 	json.put("collection", checked);
 	String valuesJSON = json.toString();
 	
-	int x = PostRequester.sendRequest(requestType, url, valuesJSON);  
+	int x = RequestSender.sendRequest(requestType, url, valuesJSON);  
 	
 	if (x == 200){
 	%>

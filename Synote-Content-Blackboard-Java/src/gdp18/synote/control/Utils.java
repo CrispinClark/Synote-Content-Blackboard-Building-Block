@@ -1,4 +1,4 @@
-package gdp18.synote;
+package gdp18.synote.control;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
